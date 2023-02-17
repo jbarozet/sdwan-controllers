@@ -18,6 +18,7 @@ resource "aws_instance" "vmanage" {
     hostname   = format("sdwan-vmanage-%02d", count.index)
     ssh_pubkey = var.ssh_pubkey
     sdwan_org  = var.sdwan_org
+    vbond_eip_allocation = var.vbond_eip_allocation
   })
 
   ebs_block_device {
@@ -28,12 +29,9 @@ resource "aws_instance" "vmanage" {
       iops                  = 3000
   }
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name  = "${format("sdwan-vmanage-%02d", count.index)}"
-    }
-  )
+  tags = {
+      Name  = "${var.common_tags}-${format("sdwan-vmanage-%02d", count.index)}"
+  }
 
   depends_on = [aws_network_interface.vmanage]
 }
@@ -57,22 +55,20 @@ resource "aws_eip" "vmanage_mgmt" {
   count = var.enable_eip_mgmt ? var.counter : 0
   network_interface = "${aws_instance.vmanage[count.index].primary_network_interface_id}"
   vpc               = true
-  tags = merge(
-    var.common_tags,
-    {
-      Name  = "${format("eip_mgmt_vmanage-%02d", count.index)}"
-    }
-  )
+
+  tags = {
+      Name  = "${var.common_tags}-${format("sdwan-vmanage-%02d", count.index)}"
+  }
+
 }
 
 resource "aws_eip" "vmanage_public" {
   count = "${var.counter}"
   network_interface = "${aws_network_interface.vmanage[count.index].id}"
   vpc               = true
-  tags = merge(
-    var.common_tags,
-    {
-      Name  = "${format("eip_vmanage-%02d", count.index)}"
-    }
-  )
+
+  tags = {
+      Name  = "${var.common_tags}-${format("sdwan-vmanage-%02d", count.index)}"
+  }
+
 }

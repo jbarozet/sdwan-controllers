@@ -15,14 +15,11 @@ resource "aws_instance" "vbond" {
     hostname   = "sdwan-vbond"
     ssh_pubkey = var.ssh_pubkey
     sdwan_org  = var.sdwan_org
+    vbond_eip_allocation = var.vbond_eip_allocation
   })
-
-  tags = merge(
-    var.common_tags,
-    {
-      Name  = "sdwan-vbond"
-    }
-  )
+  tags = {
+      Name  = "${var.common_tags}-sdwan-vbond"
+  }
 
   depends_on = [aws_network_interface.vbond]
 }

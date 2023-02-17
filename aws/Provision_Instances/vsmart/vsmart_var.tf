@@ -11,3 +11,4 @@ variable "enable_eip_mgmt" {}
 variable "ssh_pubkey" {}
 variable "sdwan_org" {}
 variable "route53_zone" {}
+variable "vbond_eip_allocation" {}

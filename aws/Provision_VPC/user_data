@@ -1,26 +1,3 @@
-data "aws_ami" "ubuntu-kinetic" {
-  most_recent = true
-  owners      = ["099720109477"]
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-kinetic-22.10-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
-resource "aws_instance" "devbox" {
-    ami                         = "${data.aws_ami.ubuntu-kinetic.id}"
-    instance_type               = "${var.devbox_instance_type}"
-    vpc_security_group_ids      = ["${aws_security_group.sdwan_cp.id}"]
-    subnet_id                   = "${aws_subnet.public_subnet_az_1.id}"
-    private_ip                  = cidrhost(aws_subnet.public_subnet_az_1.cidr_block, 10)
-    associate_public_ip_address = true
-    user_data                   = <<EOF
 #cloud-config
 hostname: devbox
 users:
@@ -55,13 +32,3 @@ write_files:
   content: |
     set-option -g prefix C-a
     new-session
-EOF
-
-    tags = {
-      Name = "${var.common_tags}-devbox" 
-    }
-}
-
-output "devbox_public_ip" {
-    value = aws_instance.devbox.public_ip
-}

@@ -25,12 +25,9 @@ resource "aws_vpc" "sdwan_cp" {
   cidr_block           = "${var.cidr_block}"
   enable_dns_hostnames = true
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name = "SD-WAN CP"
-    }
-  )
+  tags = {
+    Name = "${var.common_tags}-sdwan-cp" 
+  }
 }
 
 /*
@@ -39,12 +36,9 @@ resource "aws_vpc" "sdwan_cp" {
 resource "aws_internet_gateway" "sdwan_cp" {
   vpc_id = "${aws_vpc.sdwan_cp.id}"
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name = "SD-WAN CP"
-    }
-  )
+  tags = {
+    Name = "${var.common_tags}-sdwan-cp" 
+  }
 }
 
 /*
@@ -55,13 +49,9 @@ resource "aws_subnet" "mgmt_subnet_az_1" {
   cidr_block        = cidrsubnet("${var.cidr_block}", 2, 0)
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name = "subnet_mgmt_az_1"
-      VPC  = "SD-WAN CP"
-    }
-  )
+  tags = {
+    Name = "${var.common_tags}-sdwan-cp" 
+  }
 }
 
 resource "aws_subnet" "mgmt_subnet_az_2" {
@@ -69,13 +59,9 @@ resource "aws_subnet" "mgmt_subnet_az_2" {
   cidr_block        = cidrsubnet("${var.cidr_block}", 2, 2)
   availability_zone = "${data.aws_availability_zones.available.names[1]}"
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name = "subnet_mgmt_az_2"
-      VPC  = "SD-WAN CP"
-    }
-  )
+  tags = {
+    Name = "${var.common_tags}-sdwan-cp" 
+  }
 }
 
 resource "aws_subnet" "public_subnet_az_1" {
@@ -83,13 +69,9 @@ resource "aws_subnet" "public_subnet_az_1" {
   cidr_block        = cidrsubnet("${var.cidr_block}", 2, 1)
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name = "subnet_public_az_1"
-      VPC  = "SD-WAN CP"
-    }
-  )
+  tags = {
+    Name = "${var.common_tags}-sdwan-cp" 
+  }
 }
 
 resource "aws_subnet" "public_subnet_az_2" {
@@ -97,13 +79,9 @@ resource "aws_subnet" "public_subnet_az_2" {
   cidr_block        = cidrsubnet("${var.cidr_block}", 2, 3)
   availability_zone = "${data.aws_availability_zones.available.names[1]}"
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name = "subnet_public_az_2"
-      VPC  = "SD-WAN CP"
-    }
-  )
+  tags = {
+    Name = "${var.common_tags}-sdwan-cp" 
+  }
 }
 
 /*
@@ -117,13 +95,9 @@ resource "aws_route_table" "mgmt" {
     gateway_id = "${aws_internet_gateway.sdwan_cp.id}"
   }
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name = "SD-WAN CP (mgmt)"
-      VPC  = "SD-WAN CP"
-    }
-  )
+  tags = {
+    Name = "${var.common_tags}-sdwan-cp" 
+  }
 }
 
 resource "aws_route_table" "public" {
@@ -134,13 +108,9 @@ resource "aws_route_table" "public" {
     gateway_id = "${aws_internet_gateway.sdwan_cp.id}"
   }
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name = "SD-WAN CP"
-      VPC  = "SD-WAN CP"
-    }
-  )
+  tags = {
+    Name = "${var.common_tags}-sdwan-cp" 
+  }
 }
 
 /*
@@ -239,12 +209,9 @@ resource "aws_security_group" "sdwan_cp" {
 
   vpc_id = "${aws_vpc.sdwan_cp.id}"
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name = "SD-WAN CP"
-    }
-  )
+  tags = {
+    Name = "${var.common_tags}-sdwan-cp" 
+  }
 }
 
 /*
@@ -252,10 +219,8 @@ resource "aws_security_group" "sdwan_cp" {
 */
 resource "aws_eip" "vbond_public" {
   vpc               = true
-  tags = merge(
-    var.common_tags,
-    {
-      Name  = "eip_vbond"
-    }
-  )
+
+  tags = {
+    Name = "${var.common_tags}-vbond-eip" 
+  }
 }

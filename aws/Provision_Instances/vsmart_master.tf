@@ -13,4 +13,5 @@ module "vsmart" {
   counter                = "${var.vsmart_count}"
   mgmt_subnets           = "${data.terraform_remote_state.spam.outputs.mgmt_subnets}"
   public_subnets         = "${data.terraform_remote_state.spam.outputs.public_subnets}"
+  vbond_eip_allocation   = "${data.terraform_remote_state.spam.outputs.vbond_eip_allocation}"
 }
